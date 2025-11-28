@@ -1,0 +1,92 @@
+Metadata-Version: 2.4
+Name: chronograf
+Version: 0.1.0
+Summary: Chronograf (RGC): Robot temporal synchronization and manifest builder.
+Author-email: Pasquale Ranieri <info@robotchronograf.org>
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: click>=8.0
+Dynamic: license-file
+
+Universal Temporal Kernel for Embodied AI & Robotics
+
+Chronograf is the temporal synchronization subsystem of embodied AI.
+It defines how a robot perceives, measures, dilates, and distributes time, through the Robot ChronoGraph Specification (RGC).
+
+This repository includes:
+
+The Chronograf Python CLI (chronograf)
+
+The full RGC Specification
+
+time_kernel.rcg – physical & cognitive time model
+
+time_channels.rcg – canonical temporal channel map
+
+time_topology.rcg – directed temporal dependency graph
+
+Tools for manifest hashing, integrity validation, and spec regeneration
+
+Chronograf is the temporal backbone for robotics, distributed AI systems, and inter-agent cognition.
+
+🛠️ Installation
+
+Chronograf is available on PyPI:
+
+pip install chronograf
+
+🚀 Basic Usage
+
+Rebuild and synchronize the robot’s temporal manifest:
+
+chronograf sync --spec-dir spec/00_core/chronograf
+
+
+This command automatically:
+
+Regenerates chronograf_manifest.rcg
+
+Computes fresh SHA256 checksums
+
+Updates timestamps
+
+Validates structure & consistency
+
+Ensures runtime integrity before deployment
+
+📂 Repository Structure
+chronograf/
+ ├── src/robotchronograf/            # Python CLI & runtime
+ │
+ ├── spec/
+ │   └── 00_core/
+ │       └── chronograf/
+ │           ├── layers/             # RGC temporal definition files
+ │           │   ├── time_kernel.rcg
+ │           │   ├── time_channels.rcg
+ │           │   └── time_topology.rcg
+ │           │
+ │           ├── manifest/
+ │           │   └── chronograf_manifest.rcg
+ │           │
+ │           └── tools/
+ │               ├── build_chronograf.py
+ │               └── validate_chronograf.py
+ │
+ ├── LICENSE
+ ├── README.md
+ └── pyproject.toml
+
+🧪 Status
+
+Chronograf RGC v0.1.0 — Public Draft
+Suitable for research, prototyping, simulation, and academic robotics.
+
+📜 License
+
+Polyform Noncommercial License 1.0.0
+This software is free for noncommercial use.
+Commercial integration requires a separate license agreement.
+
+© 2025 – Pasquale Ranieri (RobotChronograf)

@@ -1,0 +1,172 @@
+/**
+ * ----------------------------------------------------------------------
+ * OPENRGD — TIME TOPOLOGY GRAPH (CHRONOGRAF MODEL)
+ * ----------------------------------------------------------------------
+ * FILE: time_topology.rcg
+ * VERSION: 0.2.0
+ *
+ * PURPOSE
+ *   Defines the wiring diagram of the Time Kernel:
+ *     - HOW temporal loops are scheduled (frequencies, priorities, domains)
+ *     - HOW loops depend on each other (survival dependencies)
+ *     - HOW different temporal layers (Chronos, Kairos, Aion...) interact
+ *
+ *   This file is the structural counterpart of:
+ *     - time_kernel.rcg    → what time IS (layers, Time Atom, uncertainty)
+ *     - time_channels.rcg  → how time is ADDRESSED (channels, IDs, layers)
+ *     - chronograf_manifest.rcg → precomputed, cache-friendly snapshot
+ *
+ * PERSONAL NOTE
+ *   If time_kernel is the constitution, this file is the city map
+ *   of how clocks, minds and swarms actually run.
+ * ----------------------------------------------------------------------
+ */
+
+{
+  // ================================================================
+  // 0. META
+  // ================================================================
+  "meta_group": {
+    "profile_id_str": "openrgd_time_topology_v1",
+    "spec_version_semver_str": "0.2.0",
+    "description_str": "Execution loops, dependencies and temporal modes for Chronograf."
+  },
+
+  // ================================================================
+  // 1. EXECUTION MODES
+  //    High-level modes for the same topology (real robot vs sim).
+  // ================================================================
+  "execution_modes_group": {
+    "REAL_WORLD": {
+      "description_str": "Robot operating in the physical world.",
+      "chronos_source_enum_str": "PTP_GPSDO",
+      "simulation_time_enabled_bool": false
+    },
+    "LAB_SIMULATION": {
+      "description_str": "Robot running inside a physics simulator.",
+      "chronos_source_enum_str": "EXTERNAL_SIMULATOR",
+      "simulation_time_enabled_bool": true
+    }
+  },
+
+  // ================================================================
+  // 2. CORE EXECUTION LOOPS
+  //    Who ticks at which frequency, and which domains they drive.
+  // ================================================================
+  "loops_list": [
+    {
+      "loop_id_str": "loop_chronos_core",
+      "driven_by_channel_code_str": "CHR_CORE",
+      "target_frequency_hz_float": 1000.0,
+      "priority_enum_str": "HIGHEST",
+      "updates_domains_list": ["D01_FOUNDATION", "D02_OPERATION"],
+      "description_str": "High-frequency body loop: motors, low-level sensors, immediate safety.",
+      "recommended_scheduler_hint_str": "Pinned to real-time core if available."
+    },
+    {
+      "loop_id_str": "loop_kairos_cognition",
+      "driven_by_channel_code_str": "KAI_BASE",
+      "target_frequency_hz_float": 10.0,
+      "priority_enum_str": "HIGH",
+      "updates_domains_list": ["D03_AGENCY", "D04_VOLITION"],
+      "description_str": "Cognitive loop: perception, appraisal, planning, medium-term decisions.",
+      "recommended_scheduler_hint_str": "Soft real-time, co-located with inference hardware."
+    },
+    {
+      "loop_id_str": "loop_aion_social",
+      "driven_by_channel_code_str": "AIO_SWARM",
+      "target_frequency_hz_float": 2.0,
+      "priority_enum_str": "MEDIUM",
+      "updates_domains_list": ["D06_ETHER"],
+      "description_str": "Social/swarm loop: multi-agent coordination, consensus, social timing.",
+      "recommended_scheduler_hint_str": "Can tolerate moderate jitter, but SHOULD not starve."
+    },
+    {
+      "loop_id_str": "loop_kairos_oneiric",
+      "driven_by_channel_code_str": "KAI_ONEIRIC",
+      "target_frequency_hz_float": 1.0,
+      "priority_enum_str": "LOW",
+      "updates_domains_list": ["D03_AGENCY", "D05_EVOLUTION"],
+      "description_str": "Oneiric loop: replay, consolidation, dreams and self-model updates.",
+      "recommended_scheduler_hint_str": "Preferably scheduled during AIO_MAINT_WINDOW or low-load phases."
+    }
+  ],
+
+  // ================================================================
+  // 3. LOOP DEPENDENCIES
+  //    Directed edges: who feeds whom.
+  // ================================================================
+  "loop_dependencies_adj_list": [
+    {
+      "upstream_loop_id_str": "loop_chronos_core",
+      "downstream_loop_ids_list": [
+        "loop_kairos_cognition",
+        "loop_kairos_oneiric"
+      ],
+      "description_str": "Physical body loop feeds both live cognition and oneiric consolidation."
+    },
+    {
+      "upstream_loop_id_str": "loop_kairos_cognition",
+      "downstream_loop_ids_list": [
+        "loop_aion_social"
+      ],
+      "description_str": "Cognitive decisions propagate into social/swarm coordination."
+    }
+  ],
+
+  // ================================================================
+  // 4. TEMPORAL RHYTHMS (RFC 5545-LIKE)
+  //    High-level rhythms used by Aion channels (AIO_RHYTHM_SYS, etc.).
+  // ================================================================
+  "temporal_rhythms_group": {
+    "supported_frequencies_list": [
+      "SECONDLY",
+      "MINUTELY",
+      "HOURLY",
+      "DAILY",
+      "WEEKLY",
+      "MONTHLY",
+      "YEARLY"
+    ],
+    "supported_operators_list": [
+      "BYDAY",
+      "BYMONTH",
+      "BYHOUR",
+      "BYMINUTE",
+      "INTERVAL",
+      "COUNT",
+      "UNTIL"
+    ],
+    "predefined_rhythms_map": {
+      "STD_BUSINESS_HOURS": "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;BYHOUR=9,10,11,12,13,14,15,16,17",
+      "STD_WEEKEND_OFF": "FREQ=WEEKLY;BYDAY=SA,SU",
+      "STD_NIGHT_SHIFT": "FREQ=DAILY;BYHOUR=22,23,0,1,2,3,4,5,6",
+      "STD_WEEKLY_MAINT": "FREQ=WEEKLY;BYDAY=SU;BYHOUR=03;BYMINUTE=00"
+    }
+  },
+
+  // ================================================================
+  // 5. ANOMALY HANDLING
+  //    How temporal anomalies feed into Eschaton channels.
+  // ================================================================
+  "anomaly_handling_group": {
+    "max_allowed_global_jitter_ms_float": 0.5,
+    "max_allowed_drift_ms_per_hour_float": 10.0,
+
+    "on_clock_anomaly_escalation_chain_list": [
+      "MCH_ALETHEIA",
+      "ESC_POLICY",
+      "ESC_GRACE"
+    ],
+
+    "doc_str": "If Chronos deviates beyond these bounds, the kernel SHOULD raise events on MCH_ALETHEIA, then escalate to ESC_POLICY and optionally ESC_GRACE."
+  },
+
+  // ================================================================
+  // 6. PARTICIPATION NOTES
+  // ================================================================
+  "participation_notes_group": {
+    "open_research_invite_str": "If your architecture uses different loop topologies (e.g. hundreds of micro-loops, layered cortical maps), propose a compatible encoding instead of a competing one.",
+    "personal_note_str": "This topology is intentionally small and story-like. Real robots will probably add many more loops, but if you keep the narrative clear, future readers (and LLMs) will thank you."
+  }
+}

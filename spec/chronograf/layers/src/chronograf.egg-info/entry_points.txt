@@ -1,0 +1,2 @@
+[console_scripts]
+chronograf = robotchronograf.cli:main

@@ -1,0 +1,273 @@
+/**
+ * ----------------------------------------------------------------------
+ * OPENRGD — TIME CHANNEL MAP SPECIFICATION
+ * ----------------------------------------------------------------------
+ * FILE: time_channels.rcg
+ * VERSION: 0.2.0
+ *
+ * PURPOSE
+ *   Define a stable, extensible mapping between:
+ *     - Greek temporal layers (Chronos, Kairos, Aion, Metachronos, Eschaton)
+ *     - Compact ASCII codes (CHR_CORE, KAI_EMERGENCY, MCH_ANANKE, etc.)
+ *     - Numeric channel IDs (16-bit hex) for logs and protocols
+ *
+ *   This file is the canonical "map of time" for OpenRGD runtimes.
+ *   A Temporal Barcode always includes a channel_code_str that MUST be
+ *   resolvable via this map (or its future extensions).
+ *
+ * PERSONAL NOTE
+ *   Think of this file as a metro map of time:
+ *   each channel is a line where events travel with a recognizable color.
+ * ----------------------------------------------------------------------
+ */
+
+{
+  // ================================================================
+  // 0. META
+  // ================================================================
+  "meta_group": {
+    "profile_id_str": "openrgd_time_channels_v1",
+    "spec_version_semver_str": "0.2.0",
+    "description_str": "Canonical time channel map for Chronograf.",
+    "author_str": "Pasquale Ranieri — Italia Robotica"
+  },
+
+  // ================================================================
+  // 1. LAYERS (COARSE-GRAINED)
+  // ================================================================
+  "layers_map": {
+    "CHRONOS": {
+      "layer_id_hex_str": "0x1",
+      "greek_name_str": "Chronos",
+      "description_str": "Irreversible physical time: control loops, clocks, entropy."
+    },
+    "KAIROS": {
+      "layer_id_hex_str": "0x2",
+      "greek_name_str": "Kairos",
+      "description_str": "Subjective and elastic time: cognition, attention, mental flow."
+    },
+    "AION": {
+      "layer_id_hex_str": "0x3",
+      "greek_name_str": "Aion",
+      "description_str": "Collective and relational time: swarms, social sync, reputational lag."
+    },
+    "METACHRONOS": {
+      "layer_id_hex_str": "0x4",
+      "greek_name_str": "Metachronos",
+      "description_str": "Meta-temporal control: anomaly detection, policy, temporal ethics."
+    },
+    "ESCHATON": {
+      "layer_id_hex_str": "0xF",
+      "greek_name_str": "Eschaton",
+      "description_str": "End-of-life, panic rails, live overrides and graceful exits."
+    }
+  },
+
+  // ================================================================
+  // 2. CHANNEL DEFINITIONS
+  //    23 canonical channels (v1). Manifest must list the same count.
+  // ================================================================
+  "channels_list": [
+    // ---------------- CHRONOS (0x1*) ----------------
+    {
+      "channel_id_hex_str": "0x1101",
+      "channel_code_str": "CHR_CORE",
+      "layer_enum_str": "CHRONOS",
+      "description_str": "Core physical timebase: high-frequency control, motor sync, sensor fusion.",
+      "suggested_priority_level_int": 1,
+      "primary_domain_enum_str": "D01_FOUNDATION"
+    },
+    {
+      "channel_id_hex_str": "0x1201",
+      "channel_code_str": "CHR_EVOLUTION",
+      "layer_enum_str": "CHRONOS",
+      "description_str": "Slow physical evolution: wear, fatigue, cumulative lifetime.",
+      "suggested_priority_level_int": 2,
+      "primary_domain_enum_str": "D05_EVOLUTION"
+    },
+    {
+      "channel_id_hex_str": "0x1301",
+      "channel_code_str": "CHR_CAUSAL",
+      "layer_enum_str": "CHRONOS",
+      "description_str": "Causal spine of the agent: ordering of sensor events and motor commits.",
+      "suggested_priority_level_int": 1,
+      "primary_domain_enum_str": "D02_OPERATION"
+    },
+
+    // ---------------- KAIROS (0x2*) ----------------
+    {
+      "channel_id_hex_str": "0x2101",
+      "channel_code_str": "KAI_BASE",
+      "layer_enum_str": "KAIROS",
+      "description_str": "Baseline cognitive flow: perception, appraisal, default thought.",
+      "suggested_priority_level_int": 2,
+      "primary_domain_enum_str": "D03_AGENCY"
+    },
+    {
+      "channel_id_hex_str": "0x2102",
+      "channel_code_str": "KAI_EMERGENCY",
+      "layer_enum_str": "KAIROS",
+      "description_str": "Emergency cognitive channel: panic, reflex-level decisions.",
+      "suggested_priority_level_int": 1,
+      "primary_domain_enum_str": "D03_AGENCY"
+    },
+    {
+      "channel_id_hex_str": "0x2103",
+      "channel_code_str": "KAI_IDLE",
+      "layer_enum_str": "KAIROS",
+      "description_str": "Idle mind-wandering, background association, low-priority thoughts.",
+      "suggested_priority_level_int": 4,
+      "primary_domain_enum_str": "D03_AGENCY"
+    },
+    {
+      "channel_id_hex_str": "0x2201",
+      "channel_code_str": "KAI_PREDICT",
+      "layer_enum_str": "KAIROS",
+      "description_str": "Predictive simulation: forecasting, model rollouts, scenario trees.",
+      "suggested_priority_level_int": 2,
+      "primary_domain_enum_str": "D03_AGENCY"
+    },
+    {
+      "channel_id_hex_str": "0x2301",
+      "channel_code_str": "KAI_ONEIRIC",
+      "layer_enum_str": "KAIROS",
+      "description_str": "Oneiric mode: dreams, compressed replay, offline consolidation.",
+      "suggested_priority_level_int": 4,
+      "primary_domain_enum_str": "D05_EVOLUTION"
+    },
+
+    // ---------------- AION (0x3*) ----------------
+    {
+      "channel_id_hex_str": "0x3101",
+      "channel_code_str": "AIO_INTERACTION",
+      "layer_enum_str": "AION",
+      "description_str": "Local social interactions: conversation, gestures, shared activities.",
+      "suggested_priority_level_int": 3,
+      "primary_domain_enum_str": "D06_ETHER"
+    },
+    {
+      "channel_id_hex_str": "0x3201",
+      "channel_code_str": "AIO_SWARM",
+      "layer_enum_str": "AION",
+      "description_str": "Distributed swarm coordination: consensus, shared tasks, formations.",
+      "suggested_priority_level_int": 2,
+      "primary_domain_enum_str": "D06_ETHER"
+    },
+    {
+      "channel_id_hex_str": "0x3301",
+      "channel_code_str": "AIO_RHYTHM_SYS",
+      "layer_enum_str": "AION",
+      "description_str": "System-level rhythms: business hours, night shifts, periodic rituals.",
+      "suggested_priority_level_int": 4,
+      "primary_domain_enum_str": "D06_ETHER"
+    },
+    {
+      "channel_id_hex_str": "0x3302",
+      "channel_code_str": "AIO_MAINT_WINDOW",
+      "layer_enum_str": "AION",
+      "description_str": "Planned maintenance windows: updates, reboots, heavy recomputation.",
+      "suggested_priority_level_int": 2,
+      "primary_domain_enum_str": "D06_ETHER"
+    },
+
+    // ---------------- METACHRONOS (0x4*) ----------------
+    {
+      "channel_id_hex_str": "0x4101",
+      "channel_code_str": "MCH_ANANKE",
+      "layer_enum_str": "METACHRONOS",
+      "description_str": "Necessity: hard constraints that must not be violated.",
+      "suggested_priority_level_int": 3,
+      "primary_domain_enum_str": "META_CROSS"
+    },
+    {
+      "channel_id_hex_str": "0x4201",
+      "channel_code_str": "MCH_ALETHEIA",
+      "layer_enum_str": "METACHRONOS",
+      "description_str": "Truth: temporal integrity checks, tampering detection, audits.",
+      "suggested_priority_level_int": 3,
+      "primary_domain_enum_str": "META_CROSS"
+    },
+    {
+      "channel_id_hex_str": "0x4301",
+      "channel_code_str": "MCH_SYMPATHEIA",
+      "layer_enum_str": "METACHRONOS",
+      "description_str": "Sympatheia: alignment between agent time and human rhythms.",
+      "suggested_priority_level_int": 2,
+      "primary_domain_enum_str": "META_CROSS"
+    },
+    {
+      "channel_id_hex_str": "0x4401",
+      "channel_code_str": "MCH_ENARGEIA",
+      "layer_enum_str": "METACHRONOS",
+      "description_str": "Enargeia: making temporal structure explicit and vivid for observers.",
+      "suggested_priority_level_int": 3,
+      "primary_domain_enum_str": "META_CROSS"
+    },
+    {
+      "channel_id_hex_str": "0x4501",
+      "channel_code_str": "MCH_PHYSIS",
+      "layer_enum_str": "METACHRONOS",
+      "description_str": "Physis: physical constraints, environment-driven temporal changes.",
+      "suggested_priority_level_int": 3,
+      "primary_domain_enum_str": "META_CROSS"
+    },
+    {
+      "channel_id_hex_str": "0x4601",
+      "channel_code_str": "MCH_HYPOSTASIS",
+      "layer_enum_str": "METACHRONOS",
+      "description_str": "Hypostasis: core identity continuity across reboots and updates.",
+      "suggested_priority_level_int": 3,
+      "primary_domain_enum_str": "META_CROSS"
+    },
+    {
+      "channel_id_hex_str": "0x4701",
+      "channel_code_str": "MCH_PALINGENESIA",
+      "layer_enum_str": "METACHRONOS",
+      "description_str": "Palingenesia: rebirth cycles, migrations, major version transitions.",
+      "suggested_priority_level_int": 4,
+      "primary_domain_enum_str": "META_CROSS"
+    },
+
+    // ---------------- ESCHATON (0xF*) ----------------
+    {
+      "channel_id_hex_str": "0xF000",
+      "channel_code_str": "ESC_PAN_REQUEST",
+      "layer_enum_str": "ESCHATON",
+      "description_str": "Panic request line: anything trying to scream 'STOP NOW'.",
+      "suggested_priority_level_int": 1,
+      "primary_domain_enum_str": "META_CROSS"
+    },
+    {
+      "channel_id_hex_str": "0xF101",
+      "channel_code_str": "ESC_LIVE",
+      "layer_enum_str": "ESCHATON",
+      "description_str": "Live human override: teleoperation, emergency commands.",
+      "suggested_priority_level_int": 1,
+      "primary_domain_enum_str": "META_CROSS"
+    },
+    {
+      "channel_id_hex_str": "0xF102",
+      "channel_code_str": "ESC_POLICY",
+      "layer_enum_str": "ESCHATON",
+      "description_str": "Policy-level emergency decisions, including temporal circuit-breakers.",
+      "suggested_priority_level_int": 1,
+      "primary_domain_enum_str": "META_CROSS"
+    },
+    {
+      "channel_id_hex_str": "0xF103",
+      "channel_code_str": "ESC_GRACE",
+      "layer_enum_str": "ESCHATON",
+      "description_str": "Graceful degradation and shutdown rituals.",
+      "suggested_priority_level_int": 1,
+      "primary_domain_enum_str": "META_CROSS"
+    }
+  ],
+
+  // ================================================================
+  // 3. PARTICIPATION NOTES
+  // ================================================================
+  "participation_notes_group": {
+    "extension_hint_str": "New channels SHOULD use unused layer/id ranges and document their semantics clearly for LLM consumption.",
+    "personal_note_str": "If you invent a beautiful new temporal channel (for music, play, art, whatever), document it here. Robots deserve good time, not just precise time."
+  }
+}

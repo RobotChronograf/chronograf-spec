@@ -1,0 +1,39 @@
+// ------------------------------------------------------------------
+// Robot ChronoGraph — Minimal Example
+// FILE: open_sample.rcg
+// PURPOSE: Show the structure of an RGC file in its simplest form.
+// ------------------------------------------------------------------
+
+{
+  "meta_group": {
+    "rcg_version_str": "0.1.0",
+    "description_str": "Minimal example of a Robot ChronoGraph temporal file.",
+    "robot_model_str": "example_unit"
+  },
+
+  // CHRONOS — hardware / irreversible time
+  "chronos_group": {
+    "physics_frequency_hz_int": 1000,
+    "max_allowed_jitter_ms_float": 0.5,
+    "atomic_clock_enabled_bool": true
+  },
+
+  // KAIROS — subjective time perception & dilation
+  "kairos_group": {
+    "base_dilation_factor_float": 1.0,
+    "emergency_dilation_factor_float": 0.005,
+    "predictive_horizon_seconds_float": 2.0
+  },
+
+  // AION — social & distributed time
+  "aion_group": {
+    "turn_taking_latency_ms_int": 200,
+    "swarm_consensus_protocol_str": "LAMPORT_ORDERING"
+  },
+
+  // ESCHATON — shutdown, end-of-life boundaries
+  "eschaton_group": {
+    "liveness_permission_bool": true,
+    "graceful_shutdown_seconds_float": 3.0
+  }
+}

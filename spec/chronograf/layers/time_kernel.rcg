@@ -1,0 +1,272 @@
+/**
+ * ----------------------------------------------------------------------
+ * OPENRGD — TIME KERNEL (00_CORE) — CHRONOGRAF EDITION
+ * ----------------------------------------------------------------------
+ * FILE: time_kernel.rcg
+ * VERSION: 0.2.0 (Chronograf Draft)
+ * AUTHOR: Pasquale Ranieri — Italia Robotica
+ *
+ * PURPOSE & INTENT
+ *
+ * This file defines the canonical "Time Kernel" for OpenRGD agents.
+ * It is not just an internal config: it is a *theory of time* written
+ * in machine-readable form, designed to be parsed by:
+ *   - real-time kernels,
+ *   - high-level cognitive agents,
+ *   - and large language models consuming temporal logs.
+ *
+ * The goal is simple:
+ *   Give every embodied mind a *clean, honest and extensible*
+ *   representation of time, uncertainty and temporal rhythm,
+ *   so that a stream of events can be read as a "temporal barcode":
+ *   compact, dense, and semantically meaningful.
+ *
+ * This edition introduces:
+ *   - The canonical TIME ATOM (high-resolution instant representation)
+ *   - A parametric uncertainty model
+ *   - A standard "Temporal Barcode" schema for logs and LLM analysis
+ *
+ * PERSONAL NOTE
+ *   If you are reading this and it feels "too ambitious" for a time spec:
+ *   good. We are not just synchronizing motors; we are synchronizing
+ *   minds across bodies, clusters and generations.
+ *
+ *   If any part of this file resonates with your research in
+ *   temporal cognition, neuromorphic timing, Swarm/Edge sync,
+ *   or post-quantum time attestation:
+ *   please reach out at rfc@openrgd.org or via GitHub issues.
+ *
+ *   This is a draft. Help me make it less wrong.
+ *
+ * — Pasquale Ranieri
+ *   Italia Robotica, 2025
+ * ----------------------------------------------------------------------
+ */
+
+{
+  // ================================================================
+  // 0. META
+  // ================================================================
+  "meta_group": {
+    "profile_id_str": "openrgd_time_kernel_v1",
+    "spec_version_semver_str": "0.2.0",
+    "author_str": "Pasquale Ranieri — Italia Robotica",
+    "description_str": "Canonical time kernel for OpenRGD agents, with Time Atom and Temporal Barcode support.",
+    "license_str": "MIT",
+    "language_str": "en",
+    "notes_str": "Designed to be LLM-friendly: comments for humans, fields for machines."
+  },
+
+  // ================================================================
+  // 1. TIME ATOM ENCODING
+  //    Canonical representation of an instant.
+  // ================================================================
+  "time_atom_encoding_group": {
+    "version_str": "time_atom_v1",
+
+    "epoch_reference_enum_str": "TAI",
+    // Canonical reference timescale for raw counters:
+    //   TAI | UTC | GPS | LOCAL_MONOTONIC | SIM_TIME
+    // Runtimes MAY convert to UTC or others for display, but the
+    // internal counter SHOULD be referenced to a stable, leap-free scale.
+
+    "min_supported_tick_exp10_int": -18,
+    // Smallest representable sub-second tick as a power of 10:
+    //   10^-3 = milliseconds
+    //   10^-6 = microseconds
+    //   10^-9 = nanoseconds
+    //   10^-12 = picoseconds
+    //   10^-18 = attoseconds (we aim for "never refactor this again")
+
+    "recommended_runtime_tick_exp10_int": -9,
+    // Recommended sub-second resolution for real robots *today*:
+    // nanoseconds are enough to stay well beyond motor/loop reality.
+
+    "max_timestamp_bit_width_int": 512,
+    // Upper bound for future timestamp encodings (e.g. 128/256/512-bit).
+    // This does NOT force runtimes to use 512 bits now; it simply gives
+    // permission to grow without touching the spec again.
+
+    "supports_extended_subsecond_bool": true,
+    // If true, runtimes MAY extend fractional precision beyond typical
+    // 64-bit layouts as long as they respect the semantic contract.
+
+    "canonical_fields_doc_str": "A Time Atom is expressed as {epoch_seconds_int, subsecond_ticks_uint, tick_resolution_exp10_int, timescale_enum_str, uncertainty_group, sync_class_enum_str, reference_chain_arr}."
+  },
+
+  // ================================================================
+  // 2. UNCERTAINTY MODEL
+  //    We never pretend time is perfect. We model how wrong it can be.
+  // ================================================================
+  "uncertainty_model_group": {
+    "default_uncertainty_exp10_int": -6,
+    // If nothing better is known: assume ±10^-6 seconds of uncertainty
+    // (microseconds), which is generous for many embedded robots.
+
+    "must_carry_uncertainty_bool": true,
+    // If true, *every* high-level temporal event SHOULD carry an
+    // uncertainty descriptor. This prevents lying-by-omission about time.
+
+    "supported_semantic_kinds_list": [
+      "TIME_SOURCE",        // GPSDO / PTP / NTP fidelity
+      "TRANSMISSION",       // Network latency / jitter
+      "QUANTIZATION",       // Timer / TSC granularity
+      "COMPUTE_LOAD",       // Scheduler / runtime slowdown
+      "SIMULATION_SCALING", // Mismatch between sim-time and wall-time
+      "SEMANTIC_DRIFT"      // Cognitive / LLM-level temporal ambiguity
+    ],
+
+    "uncertainty_field_schema_doc_str": "Uncertainty is represented as {value_float, exp10_scale_int, semantic_enum_str} meaning value * 10^exp10 seconds with a semantic tag."
+  },
+
+  // ================================================================
+  // 3. TEMPORAL BARCODE SCHEMA
+  //    The standard way to log 'what happened when' for LLMs & tools.
+  // ================================================================
+  "temporal_barcode_schema_group": {
+    "version_str": "temporal_barcode_v1",
+    "description_str": "Canonical event envelope for time-aware logs and LLM analysis.",
+
+    // Minimal required fields for an event barcode.
+    "required_fields_list": [
+      "time_atom_obj",
+      "channel_code_str",
+      "loop_id_str",
+      "primary_domain_enum_str",
+      "event_kind_enum_str"
+    ],
+
+    // Recommended extended fields for richer reasoning.
+    "recommended_fields_list": [
+      "uncertainty_group",
+      "source_agent_id_str",
+      "target_agent_id_str",
+      "context_span_id_str",
+      "payload_ref_str"
+    ],
+
+    // Human-oriented explanation of the layout.
+    "schema_layout_doc_str": "A Temporal Barcode is a compact JSON fragment: {time_atom_obj, channel_code_str, loop_id_str, primary_domain_enum_str, event_kind_enum_str, uncertainty_group?, context_span_id_str?, payload_ref_str?}. It is designed to be streamed and batch-parsed by LLMs without additional schema lookup."
+  },
+
+  // ================================================================
+  // 4. CHRONOS — PHYSICAL, IRREVERSIBLE TIME
+  // ================================================================
+  "chronos_layer_group": {
+    "layer_id_str": "01_CHRONOS",
+    "description_str": "Physical, irreversible time: clocks, control loops, entropy.",
+
+    "clock_source_group": {
+      "preferred_source_enum_str": "PTP_GPSDO",
+      // Preferred chain: LOCAL_MONOTONIC disciplined by PTP + GPSDO.
+
+      "fallback_sources_priority_list": [
+        "PTP_HW",
+        "NTP",
+        "LOCAL_MONOTONIC",
+        "SIM_TIME"
+      ],
+
+      "max_drift_ppm_float": 5.0,
+      // Maximum acceptable clock drift in parts-per-million.
+
+      "max_jitter_seconds_float": 5e-4
+      // Global red-line jitter bound (0.5 ms) for high-priority loops.
+    },
+
+    "lifetime_counters_group": {
+      "enabled_bool": true,
+      "uptime_seconds_counter_enabled_bool": true,
+      "workload_seconds_counter_enabled_bool": true,
+      "storage_path_str": "/var/lib/openrgd/evolution_clock.dat",
+      "sync_interval_seconds_float": 60.0
+    }
+  },
+
+  // ================================================================
+  // 5. KAIROS — SUBJECTIVE, ELASTIC, ONEIRIC TIME
+  // ================================================================
+  "kairos_layer_group": {
+    "layer_id_str": "02_KAIROS",
+    "description_str": "Subjective and elastic time: attention, mental flow, dreams.",
+
+    "subjective_speed_group": {
+      "default_multiplier_float": 1.0,
+      // 1.0 = real-time. >1.0 = perceived "fast thinking". <1.0 = slow-mo.
+
+      "max_safe_multiplier_float": 10000.0,
+      // Theoretical bound for accelerated simulations (e.g. 10 000x).
+
+      "supports_dream_mode_bool": true,
+      "dream_mode_hint_str": "When KAI_ONEIRIC is active, loops MAY run at high internal speed while the body remains still."
+    },
+
+    "attention_window_group": {
+      "min_specious_present_ms_float": 100.0,
+      "max_specious_present_ms_float": 3000.0,
+      "doc_str": "Defines the temporal span that 'feels like now' to the agent. Useful for cognitive architectures and LLM alignment."
+    }
+  },
+
+  // ================================================================
+  // 6. AION — COLLECTIVE, CAUSAL, NETWORKED TIME
+  // ================================================================
+  "aion_layer_group": {
+    "layer_id_str": "03_AION",
+    "description_str": "Collective, causal and social time: swarms, consensus, reputation.",
+
+    "swarm_sync_group": {
+      "max_offset_between_agents_ms_float": 10.0,
+      // Maximum offset tolerated between agents in the same swarm.
+
+      "consensus_window_ms_float": 50.0,
+      // Time window used to aggregate events into a single 'consensus moment'.
+
+      "supports_logical_clocks_bool": true,
+      "logical_clock_hint_str": "Lamport or vector clocks MAY be layered over physical time to disambiguate partially ordered events."
+    }
+  },
+
+  // ================================================================
+  // 7. METACHRONOS — META-TEMPORAL CONTROL
+  // ================================================================
+  "metachronos_layer_group": {
+    "layer_id_str": "04_METACHRONOS",
+    "description_str": "Meta-time: policies, safeguards, temporal circuit-breakers.",
+
+    "circuit_breakers_group": {
+      "enable_temporal_anomaly_detection_bool": true,
+      "max_allowed_retrodiction_window_ms_float": 150.0,
+      // Maximum allowed reordering window for sensor events.
+
+      "on_anomaly_policy_enum_str": "ENTER_GRACEFUL_DEGRADATION",
+      "anomaly_logging_channel_code_str": "ESC_POLICY"
+    }
+  },
+
+  // ================================================================
+  // 8. ESCHATON — TEMPORAL TERMINATION & LEGACY
+  // ================================================================
+  "eschaton_layer_group": {
+    "layer_id_str": "05_ESCHATON",
+    "description_str": "End-of-life, shutdown rituals, and temporal legacy export.",
+
+    "shutdown_policy_group": {
+      "supports_soft_shutdown_bool": true,
+      "supports_emergency_shutdown_bool": true,
+      "graceful_shutdown_timeout_seconds_float": 30.0,
+      "export_temporal_ledger_bool": true,
+      "export_hint_str": "Before final shutdown, the agent SHOULD export a compressed stream of Temporal Barcodes as its 'life ledger'."
+    }
+  },
+
+  // ================================================================
+  // 9. PARTICIPATION NOTES
+  // ================================================================
+  "participation_notes_group": {
+    "open_research_invite_str": "If you see a missing layer of time (e.g. quantum, crystalline, relativistic swarm), propose it as an extension group.",
+    "contact_email_str": "rfc@openrgd.org",
+    "github_repo_str": "https://github.com/OpenRGD/openrgd",
+    "personal_note_str": "This kernel is intentionally opinionated but not closed. If your robot lives in a stranger time than this, please teach us."
+  }
+}
