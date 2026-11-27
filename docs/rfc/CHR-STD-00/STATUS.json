@@ -1,0 +1,21 @@
+{
+  "id": "CHR-STD-00",
+  "date": "2026-11-27",
+  "maturity": "candidate",
+  "normative": false,
+  "accepted": false,
+  "owner_direction": "PRESERVE_SUFFIX_TYPED_CORE_GRAMMAR",
+  "existing_field_renames": false,
+  "shared_master_schema": "OpenRGD/openrgd:spec/rgd_schema.jsonc@afe1a831b950a4e6560f0285a0103fc4eaa343b7",
+  "source_base": "423c5d7a5b0ba645de6703c5789646eeb9186002",
+  "architecture_candidate": "21a262f6688f89db571fac42a1071995e57ba85f",
+  "external_contract_migrations": false,
+  "runtime_implemented": false,
+  "conformance_executed": false,
+  "license_change": false,
+  "review_required": [
+    "Chronograf owner",
+    "OpenRGD shared grammar owner for any future shared change"
+  ],
+  "next_research_phase": "CHR-MATH-00"
+}
