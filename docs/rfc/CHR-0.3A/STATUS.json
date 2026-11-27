@@ -1,0 +1,32 @@
+{
+  "id": "CHR-0.3A",
+  "target_version": "0.3",
+  "date": "2026-11-27",
+  "maturity": "candidate",
+  "normative": false,
+  "accepted": false,
+  "runtime_implemented": false,
+  "actuation_authority": false,
+  "stable_release_allowed": false,
+  "source_base": "423c5d7a5b0ba645de6703c5789646eeb9186002",
+  "reviewed_pins": {
+    "openrgd_agent": "afe1a831b950a4e6560f0285a0103fc4eaa343b7",
+    "openrgd_core_d": "7b15fda5c825f9359ce0045377ec38364de19efb",
+    "openrgd_core_ri": "1a0f3f0408df8b6f86ab2bf1dcfe5eccc9e826a7",
+    "cognition": "a2e8690781d9acfa2c134a0ce9722285d0723d57",
+    "physics": "265d79839fc3f86b4290f65597be38d40e86d97d",
+    "hyperkernel": "8a6d6dbf0f533e2ed2cd1eb966e680920d999703"
+  },
+  "decision_status": "PROPOSED",
+  "chronon_ownership_change": false,
+  "channel_registry_change": false,
+  "license_change": false,
+  "required_reviews": [
+    "Chronograf specification owner",
+    "OpenRGD CORE-D / RI owners",
+    "RGD-Physics / History owner",
+    "Cognition owner",
+    "Licensing and publication review before normative release"
+  ],
+  "next_phase": "CHR-0.3B"
+}
